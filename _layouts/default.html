@@ -6,10 +6,11 @@
   <title>{{ page.title }}</title>
   <meta name='viewport' content='width=device-width'>
   <meta name='renderer' content='webkit'>
-  <link rel='stylesheet' href='/css/reset.css' />
+  <link rel='stylesheet' href='/css/main.css' />
 </head>
 <body>
   <header>
+    <h1><a href="http://yutingzhao.com">Love.Passion.Dream</a></h1>
     <nav>
       <ul>
         {% for nav in site.data.nav %}
@@ -21,7 +22,7 @@
     </nav>
   </header>
 
-  <main class='inner'>
+  <main>
     {{ content }}
   </main>
 

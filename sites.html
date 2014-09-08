@@ -7,19 +7,16 @@ small {
   color: #ccc;
 }
 </style>
-<article>
-  <ul>
-  {% for type in site.data.sites %}
-    <li>
-      <span>{{ type.notes }}<span>
-      <ul>
-        {% for link in type.links %}
-          <li>
-            <a href='{{ link.url }}'>{{ link.name }} <small>{{ link.notes }}</small></a>
-          </li>
-        {% endfor %}
-      </ul>
-    </li>
-  {% endfor %}
+{% for type in site.data.sites %}
+<article class="box">
+  <h3>{{ type.notes }}</h3>
+  <ul class="none-point">
+    {% for link in type.links %}
+      <li>
+        <a href='{{ link.url }}'>{{ link.name }} <small>{{ link.notes }}</small></a>
+      </li>
+    {% endfor %}
   </ul>
 </article>
+{% endfor %}
+

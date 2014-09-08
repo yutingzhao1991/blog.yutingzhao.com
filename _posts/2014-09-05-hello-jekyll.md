@@ -5,11 +5,8 @@ tags:
 - other
 ---
 
-{{ page.title }}
-----------------
+hello jekyll
 
 This is my first post with Jekyll.
 Thank You ! Github !
-
-{{ page.date | date_to_string }}
 
