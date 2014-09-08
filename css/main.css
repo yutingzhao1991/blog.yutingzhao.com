@@ -157,6 +157,7 @@ article .prev-next:hover {
     margin: 0 0 30px;
     background: #fff;
     border-bottom: 1px solid #c1c1c1;
+    overflow: auto;
 }
 
 .post-meta {
