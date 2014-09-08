@@ -1,1 +1,7 @@
-baseurl: /blog.yutingzhao.com
+name: Love.Passion.Dream
+markdown: redcarpet
+highlighter: pygments
+redcarpet:
+  extensions:
+    - tables
+    - autolink

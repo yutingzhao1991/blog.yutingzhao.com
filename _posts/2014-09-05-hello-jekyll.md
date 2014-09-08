@@ -1,6 +1,8 @@
 ---
-layout: default
+layout: post
 title: Hello Jekyll
+tags:
+- other
 ---
 
 {{ page.title }}
