@@ -1,0 +1,15 @@
+---
+layout: default
+---
+
+<article>
+  <ul>
+  {% for link in site.data.links %}
+    <li>
+      <a href="{{ link.blog }}">
+        {{ link.name }}
+      </a>
+    </li>
+  {% endfor %}
+  </ul>
+</article>

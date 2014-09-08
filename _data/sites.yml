@@ -1,0 +1,7 @@
+
+- name: github
+  notes: Github优秀开源项目
+  links:
+  - name: krakenJS
+    url: https://github.com/krakenjs/kraken-js
+    notes: Paypal 开发的前端框架，基于 Express
