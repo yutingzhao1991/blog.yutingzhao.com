@@ -1,7 +1,34 @@
 
-- name: github
-  notes: Github优秀开源项目
+- name: framework
+  notes: 开发框架
   links:
   - name: krakenJS
     url: https://github.com/krakenjs/kraken-js
     notes: Paypal 开发的前端框架，基于 Express
+
+- name: builder
+  notes: 构建工具
+  links:
+  - name: Grunt
+    url: http://gruntjs.com/
+    notes: 前端构建工具
+  - name: Gulp
+    url: http://gulpjs.com/
+    notes: 前端构建工具
+
+- name: graph
+  notes: 前端图标库
+  links:
+  - name: D3
+    url: http://d3js.org
+    notes: 开源SVG库，比较底层
+  - name: HighCharts
+    url: http://www.highcharts.com/
+    notes: 强大的图标组件
+
+- name: tool
+  notes: 开发工具
+  links:
+  - name: WRK
+    url: https://github.com/wg/wrk
+    notes: 网络IO性能测试工具
