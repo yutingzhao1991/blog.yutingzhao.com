@@ -2,6 +2,8 @@
 title: 关于setTimeout在大量dom节点渲染时的优化分析
 date: 21:26 2012/07/25
 layout: post
+tags:
+- js
 ---
 <span>1、</span><span>setTimeout<span>传递的函数被执行的时机：</span></span>
 

@@ -2,6 +2,8 @@
 title: NodeJS工具模块FileSearcher
 date: 13:30 2013/03/03
 layout: post
+tags:
+- nodejs
 ---
 需要查看文件中用到了某个类的哪些方法？
 

@@ -2,6 +2,8 @@
 title: NodeJS模块：自动化测试代理 proxy-teser
 date: 22:19 2013/05/14
 layout: post
+tags:
+- nodejs
 ---
 这段时间弄了一个半自动化的测试服务。把其中的核心模块剥离出来放到了npm上面：[proxy-tester](https://npmjs.org/package/proxy-tester "proxy-tester")。
 

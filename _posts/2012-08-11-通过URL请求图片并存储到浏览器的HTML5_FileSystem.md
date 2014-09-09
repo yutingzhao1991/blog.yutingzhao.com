@@ -2,6 +2,9 @@
 title: 通过URL请求图片并存储到浏览器的HTML5 FileSystem
 date: 16:02 2012/08/11
 layout: post
+tags:
+- js
+- html5
 ---
 这两天研究了一下HTML5的FileSystem。FileSystem使得网页和web应用可以通过浏览器获取比cookie，storage大得多的存储空间。这样使得可以在支持HTML5的浏览器中更容易的实现以前只有桌面应用能够实现的功能。比如在线的图片编辑功能就能够达到更好的用户体验，可以将未编辑完成的图片存放在本地。如果在配合离线缓存的话就可以完美的实现一个web离线应用了。  
 

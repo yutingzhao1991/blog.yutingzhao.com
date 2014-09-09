@@ -2,6 +2,8 @@
 title: 【翻译】JavaScript内存管理
 date: 00:01 2013/03/15
 layout: post
+tags:
+- js
 ---
 <span class="edui-filter-align-right">原文：</span>[Memory Management](https://developer.mozilla.org/en-US/docs/JavaScript/Memory_Management "Memory Management")  
 

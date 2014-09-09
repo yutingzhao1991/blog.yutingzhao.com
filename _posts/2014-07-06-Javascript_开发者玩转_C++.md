@@ -2,6 +2,8 @@
 title: Javascript 开发者玩转 C++
 date: 13:24 2014/07/06
 layout: post
+tags:
+- cpp
 ---
 由于项目需要，前一段时间涉足了一些 C++ 的开发， 而且是要在 PC IOS Andriod MAC 上面运行。对于写了这么久 Javascript 的我来说也算是一个挑战，也从中学到了很多东西，虽然大学的适合写得最多的也是C，C++。但是毕竟没有接触过工程级别的开发，都只是在OnlineJudge上面提交点算法题玩玩。所以也是遇到了很多坑，分享给Javascript开发者。技多不压身嘛。
 
