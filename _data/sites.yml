@@ -5,6 +5,16 @@
   - name: krakenJS
     url: https://github.com/krakenjs/kraken-js
     notes: Paypal 开发的前端框架，基于 Express
+  - name: AngularJS
+    url: https://angularjs.org/
+    notes: Google 的 MVVM 前端开发框架，大量使用指令强化HTML
+
+- name: jslib
+  notes: JS库
+  links:
+  - name: JQuery
+    url: http://jquery.com/
+    notes: 不多说，基础的 JS 库
 
 - name: builder
   notes: 构建工具
@@ -17,7 +27,7 @@
     notes: 前端构建工具
 
 - name: graph
-  notes: 前端图标库
+  notes: 前端图表库
   links:
   - name: D3
     url: http://d3js.org
@@ -32,3 +42,19 @@
   - name: WRK
     url: https://github.com/wg/wrk
     notes: 网络IO性能测试工具
+  - name: cmder
+    url: http://bliker.github.io/cmder
+    notes: Windows 上的终端，可以用linux命令
+
+- name: csss
+  notes: CSS Design
+  links:
+  - name: bootstrap
+    url: http://getbootstrap.com/
+    notes: 快速建站的CSS框架
+  - name: 站酷
+    url: http://www.zcool.com.cn/
+    notes: 国内设计师的Github
+  - name: ikons
+    url: http://ikons.piotrkwiatkowski.co.uk/
+    notes: 矢量图标

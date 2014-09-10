@@ -70,7 +70,7 @@ header nav ul li a {
     float: left;
     display: block;
     height: 35px;
-    padding: 0 20px;
+    padding: 0 12px;
     border-radius: 3px;
     text-shadow: 0 1px 1px rgba(0,0,0,0.8);
     transition: background-color .1s linear;
@@ -152,7 +152,7 @@ article .prev-next:hover {
 }
 
 .box {
-    width: 800px;
+    max-width: 860px;
     padding: 20px;
     margin: 0 0 30px;
     background: #fff;
