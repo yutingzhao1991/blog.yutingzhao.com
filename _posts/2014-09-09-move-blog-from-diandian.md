@@ -13,9 +13,9 @@ tags:
 
 里面用到了几个 NodeJS 的库：
 
-1.cheerio 解析 XML（HTML）的库，JQuery的语法
-2.fs 读取文件和写文件
-3.时间处理库
-5.HTML转Markdown文件
+1. cheerio 解析 XML（HTML）的库，JQuery的语法
+2. fs 读取文件和写文件
+3. moment 时间处理库
+5. upndown HTML转Markdown文件
 
 

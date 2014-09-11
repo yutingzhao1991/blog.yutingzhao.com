@@ -36,6 +36,16 @@
     url: http://www.highcharts.com/
     notes: 强大的图标组件
 
+- name: graph
+  notes: 前端组件库
+  links:
+  - name: bootstrap-multiselect
+    url: http://davidstutz.github.io/bootstrap-multiselect/
+    notes: boostrap风格的多选输入组件
+  - name: select2
+    url: http://ivaynberg.github.io/select2/
+    notes: select的扩展，支持多选搜索等
+
 - name: tool
   notes: 开发工具
   links:
