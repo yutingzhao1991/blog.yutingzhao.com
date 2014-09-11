@@ -5,12 +5,12 @@
 /*****************************************************************************/
 
 /* Global Reset */
-* {
+
+html, body {
+  height: 100%; 
   margin: 0;
   padding: 0;
 }
-
-html, body { height: 100%; }
 
 body {
   background-color: #efefef;
@@ -85,7 +85,7 @@ header nav ul li a:hover {
 }
 
 main {
-    padding: 120px 30px;
+    padding: 140px 30px;
 }
 
 footer {
