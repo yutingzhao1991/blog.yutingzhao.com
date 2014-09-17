@@ -8,6 +8,9 @@
   - name: AngularJS
     url: https://angularjs.org/
     notes: Google 的 MVVM 前端开发框架，大量使用指令强化HTML
+  - name: beego
+    url: http://beego.me/
+    notes: 基于 Go 语言的web框架，国人开发
 
 - name: jslib
   notes: JS库
@@ -15,6 +18,9 @@
   - name: JQuery
     url: http://jquery.com/
     notes: 不多说，基础的 JS 库
+  - name:etpl
+    url: http://ecomfe.github.io/etpl/
+    notes: Baidu EFE 的javascript模板
 
 - name: builder
   notes: 构建工具
@@ -25,6 +31,9 @@
   - name: Gulp
     url: http://gulpjs.com/
     notes: 前端构建工具
+  - name: docker
+    url: https://www.docker.com/
+    notes: docker是由go语言编写的，一个快速部署的轻量级虚拟技术项目，他允许开发人员将自己的程序和运行环境一起打包，制作成一个docker的image（镜像），这样部署到服务器上，也只需要下载这个image就可以将程序跑起来，免去每次都安装各种依赖和环境的麻烦，还能够做到应用程序之间的隔离.
 
 - name: graph
   notes: 前端图表库
@@ -35,6 +44,9 @@
   - name: HighCharts
     url: http://www.highcharts.com/
     notes: 强大的图标组件
+  - name: ECharts
+    url: http://echarts.baidu.com/
+    notes: Baidu EFE 的图标库
 
 - name: graph
   notes: 前端组件库
@@ -68,3 +80,10 @@
   - name: ikons
     url: http://ikons.piotrkwiatkowski.co.uk/
     notes: 矢量图标
+
+- name: blogs
+  notes: 技术博客
+  links:
+  - name: i.yutingzhao.com
+    url: http://i.yutingzhao.com
+    notes: 我自己

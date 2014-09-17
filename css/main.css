@@ -130,6 +130,7 @@ ul.posts-list {
 article a {
     color: #57ad68;
     padding: 2px;
+    text-decoration: none;
 }
 
 article .prev-next{
