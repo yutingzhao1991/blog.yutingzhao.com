@@ -87,3 +87,10 @@
   - name: i.yutingzhao.com
     url: http://i.yutingzhao.com
     notes: 我自己
+
+- name: bigdata
+  notes: 数据处理
+  links:
+  - name: flume
+    url: http://flume.apache.org/
+    notes: apache 的一个分布式流式数据处理框架，用于把分散的大数据聚集进行处理
