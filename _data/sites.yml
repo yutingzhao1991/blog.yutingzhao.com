@@ -18,7 +18,7 @@
   - name: JQuery
     url: http://jquery.com/
     notes: 不多说，基础的 JS 库
-  - name:etpl
+  - name: etpl
     url: http://ecomfe.github.io/etpl/
     notes: Baidu EFE 的javascript模板
 

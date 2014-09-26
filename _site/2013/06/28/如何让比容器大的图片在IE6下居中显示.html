@@ -1,0 +1,111 @@
+<!-- 没多少代码，博客所有的代码都在 github 上面，本身也是托管在gitpage上的 -->
+<!-- 欢迎交换友情链接，可以微博私信我！ -->
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+  <title>如何让比容器大的图片在IE6下居中显示</title>
+  <meta name='viewport' content='width=device-width'>
+  <meta name='renderer' content='webkit'>
+  <link rel='stylesheet' href='/css/main.css' />
+</head>
+<body>
+  <header>
+    <h1><a href="http://yutingzhao.com">Love.Passion.Dream</a></h1>
+    <nav>
+      <ul>
+        
+          <li>
+            <a href='/'>主页</a>
+          </li>
+        
+          <li>
+            <a href='/tags.html'>标签</a>
+          </li>
+        
+          <li>
+            <a href='/about.html'>我</a>
+          </li>
+        
+          <li>
+            <a href='/links.html'>友链</a>
+          </li>
+        
+          <li>
+            <a href='/sites.html'>收藏</a>
+          </li>
+        
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <article class="box">
+  <h1>如何让比容器大的图片在IE6下居中显示</h1>
+  
+  <span class="post-category">
+    <span class="label"></span>
+  </span>
+  <div class="post-meta">
+    <time class="post-date">2013-06-28 09:31</time>
+  </div>
+  <div class="post">
+  <p>很久没有接触浏览器兼容性问题了，今天有一个小需求折腾了半天。就是经常出现的居中问题，只是多了一点条件，居中的图片可能会比容器还大。不能压缩，溢出的部分需要隐藏。</p>
+
+<p>首先，如果只是要居中的话，最简单的就是margin: 0 auto。但是当内容比容器大的时候这招就不管用了。那么另外的解决方案就是设置定位为absolute或者relative，然后left设置为50%，再设置margin-left为内容的负的一半。在设置这个的时候遇到了一个坑，在IE下margin-left需要通过xxx.style.marginLeft来设置，用 xxx.style[&#39;margin-left&#39;]是不行的，这么基础的问题坑了我半天。</p>
+
+<p>然后就是overflow:hidden的问题了，在IE下position为relative的元素其父元素的hidden对其不起作用，所以需要设置为absolute，当然这样的话需要先指定其父元素的定位方式为relative或者absolute。</p>
+
+<p>看看 demo 吧：<a href="http://yutingzhao.com/resources/demos/iecss/margin-test.html" title="margin-test">margin-test</a></p>
+
+  </div>
+  <div class="post-meta">
+    <span>Tags: </span>
+    
+      <span style="margin: 5px"><a href="/tags.html#css">css</a></span>
+    
+  </div>
+  <div class="section-nav">
+    <div class="left align-left">
+      
+      <a href="/2013/05/26/%E5%9C%A8ssh%E8%BF%9E%E6%8E%A5%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84git%E4%BB%A3%E7%A0%81%E6%9C%8D%E5%8A%A1.html" class="prev-next">上一篇:<b> 在ssh连接的服务器上搭建自己的git代码服务</b></a>
+      
+    </div>
+    <div class="right align-right">
+      
+      <a href="/2013/06/29/%E4%B8%80%E4%B8%AA%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%83%A8%E7%BD%B2%E5%A4%9A%E4%B8%AA%E6%9C%8D%E5%8A%A1.html" class="prev-next">下一篇:<b> 一个虚拟机部署多个服务</b></a>
+      
+    </div>
+  </div>
+</article>
+<div class="box">
+<!-- baidu shared -->
+<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdPic":"","bdStyle":"0","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+<!-- Comment BEGIN -->
+<!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"yutingzhao"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- Duoshuo Comment END -->
+<!-- Comment END -->
+</div>
+
+
+  </main>
+
+  <footer>
+    <a href='https://github.com/yutingzhao1991'>YuTingzhao</a> Copyright © 2014 i.yutingzhao.com
+  </footer>
+</body>
+</html>

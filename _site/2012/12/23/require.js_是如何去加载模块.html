@@ -1,0 +1,271 @@
+<!-- 没多少代码，博客所有的代码都在 github 上面，本身也是托管在gitpage上的 -->
+<!-- 欢迎交换友情链接，可以微博私信我！ -->
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+  <title>require.js 是如何去加载模块</title>
+  <meta name='viewport' content='width=device-width'>
+  <meta name='renderer' content='webkit'>
+  <link rel='stylesheet' href='/css/main.css' />
+</head>
+<body>
+  <header>
+    <h1><a href="http://yutingzhao.com">Love.Passion.Dream</a></h1>
+    <nav>
+      <ul>
+        
+          <li>
+            <a href='/'>主页</a>
+          </li>
+        
+          <li>
+            <a href='/tags.html'>标签</a>
+          </li>
+        
+          <li>
+            <a href='/about.html'>我</a>
+          </li>
+        
+          <li>
+            <a href='/links.html'>友链</a>
+          </li>
+        
+          <li>
+            <a href='/sites.html'>收藏</a>
+          </li>
+        
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <article class="box">
+  <h1>require.js 是如何去加载模块</h1>
+  
+  <span class="post-category">
+    <span class="label"></span>
+  </span>
+  <div class="post-meta">
+    <time class="post-date">2012-12-23 16:48</time>
+  </div>
+  <div class="post">
+  <p><a href="http://requirejs.org">require.js</a> 是一个可以把js代码模块化的一个js框架，国内也有一个很不错的sea.js，还有之前我们组自己开发的AceAplication，pyjs，aceme。一个富js的网页对js代码按照功能进行模块划分是很有必要的。其实最简单的模块划分也可以简单的把代码用不同函数构造出闭包封装起来。</p>
+<div class="highlight"><pre><code class="javascript language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">a</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span><span class="p">;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="nx">say</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="nx">alert</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">module</span> <span class="o">=</span> <span class="nx">a</span><span class="p">();</span>
+<span class="nx">a</span><span class="p">.</span><span class="nx">say</span><span class="p">();</span>
+</code></pre></div>
+<p>这也就算是最基本的一个模块划分吧。一个a模块就这么诞生了。当然这对于以后甚至现在已经产生的越来越复杂的webapp这是远远不够的，我们还需要更多的组织代码，优化架构的东西。比如有extjs，backbone的MVC，还有seajs，require.js的异步加载等等。最终客户端软件开发有的甚至没有的也都将出现在web中，我也一直相信web有着辉煌的未来，而且不会局限于当前的浏览器与JS。</p>
+
+<p>额，有点扯了。不管未来怎么样，现在仍然是需要基于浏览器，基于JS。所以今天看了一下require.js的源代码，看一下它是如何去加载模块的。</p>
+
+<p>require.js最基本的两个方法require和define，这也是有具体的AMD规范。但是这两个方法也有很多的共同之处。</p>
+<div class="highlight"><pre><code class="javascript language-javascript" data-lang="javascript"><span class="nx">require</span><span class="p">([</span><span class="s1">&#39;./jqurey&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">$</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">define</span><span class="p">([</span><span class="s1">&#39;./jqurey&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">$</span><span class="p">);</span>
+    <span class="k">return</span> <span class="p">{};</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>这两个方法这么使用都可以去成功加载jqurey，这也导致之前在开发的时候把define写成了require结果还都能正常执行，直到后面使用到模块暴露的方法之后才出现问题。define与require不同的就是它多出来一个接口的返回。所以定义一个模块其实只需要在最后用define返回接口列表就可以了。jqurey就这是这样在代码最后面家了一段代码，使得它也可以直接在require.js中使用。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">// Expose jQuery as an AMD module, but only for AMD loaders that
+// understand the issues with loading multiple versions of jQuery
+// in a page that all might call define(). The loader will indicate
+// they have special allowances for multiple jQuery versions by
+// specifying define.amd.jQuery = true. Register as a named module,
+// since jQuery can be concatenated with other files that may use define,
+// but not use a proper concatenation script that understands anonymous
+// AMD modules. A named AMD is safest and most robust way to register.
+// Lowercase jquery is used because AMD module names are derived from
+// file names, and jQuery is normally delivered in a lowercase file name.
+// Do this after creating the global so that if an AMD module wants to call
+// noConflict to hide this version of jQuery, it will work.
+if ( typeof define === &quot;function&quot; &amp;&amp; define.amd &amp;&amp; define.amd.jQuery ) {
+    define( &quot;jquery&quot;, [], function () { return jQuery; } );
+}
+</code></pre></div>
+<p>不管是require还是define，在他们的前面都传入了他们所依赖的模块，那是怎么去异步加载这些模块的呢？</p>
+
+<p>如果没有进行代码合并，那么每一个模块是按照一个js文件来划分的。这样请求一个模块就是需要异步去加载一个js。这样如何去加载一个js需要用什么办法呢，先看require.js的代码：</p>
+<div class="highlight"><pre><code class="javascript language-javascript" data-lang="javascript"><span class="cm">/**</span>
+<span class="cm"> * Does the request to load a module for the browser case.</span>
+<span class="cm"> * Make this a separate function to allow other environments</span>
+<span class="cm"> * to override it.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param {Object} context the require context to find state.</span>
+<span class="cm"> * @param {String} moduleName the name of the module.</span>
+<span class="cm"> * @param {Object} url the URL to the module.</span>
+<span class="cm"> */</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">load</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">moduleName</span><span class="p">,</span> <span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="p">(</span><span class="nx">context</span> <span class="o">&amp;&amp;</span> <span class="nx">context</span><span class="p">.</span><span class="nx">config</span><span class="p">)</span> <span class="o">||</span> <span class="p">{},</span>
+        <span class="nx">node</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">isBrowser</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//In the browser so use a script tag</span>
+        <span class="nx">node</span> <span class="o">=</span> <span class="nx">config</span><span class="p">.</span><span class="nx">xhtml</span> <span class="o">?</span>
+                <span class="nb">document</span><span class="p">.</span><span class="nx">createElementNS</span><span class="p">(</span><span class="s1">&#39;http://www.w3.org/1999/xhtml&#39;</span><span class="p">,</span> <span class="s1">&#39;html:script&#39;</span><span class="p">)</span> <span class="o">:</span>
+                <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="nx">config</span><span class="p">.</span><span class="nx">scriptType</span> <span class="o">||</span> <span class="s1">&#39;text/javascript&#39;</span><span class="p">;</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">charset</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">;</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+
+        <span class="nx">node</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;data-requirecontext&#39;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">contextName</span><span class="p">);</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;data-requiremodule&#39;</span><span class="p">,</span> <span class="nx">moduleName</span><span class="p">);</span>
+
+        <span class="c1">//Set up load listener. Test attachEvent first because IE9 has</span>
+        <span class="c1">//a subtle issue in its addEventListener and script onload firings</span>
+        <span class="c1">//that do not match the behavior of all other browsers with</span>
+        <span class="c1">//addEventListener support, which fire the onload event for a</span>
+        <span class="c1">//script right after the script execution. See:</span>
+        <span class="c1">//https://connect.microsoft.com/IE/feedback/details/648057/script-onload-event-is-not-fired-immediately-after-script-execution</span>
+        <span class="c1">//UNFORTUNATELY Opera implements attachEvent but does not follow the script</span>
+        <span class="c1">//script execution mode.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">attachEvent</span> <span class="o">&amp;&amp;</span>
+                <span class="c1">//Check if node.attachEvent is artificially added by custom script or</span>
+                <span class="c1">//natively supported by browser</span>
+                <span class="c1">//read https://github.com/jrburke/requirejs/issues/187</span>
+                <span class="c1">//if we can NOT find [native code] then it must NOT natively supported.</span>
+                <span class="c1">//in IE8, node.attachEvent does not have toString()</span>
+                <span class="c1">//Note the test for &quot;[native code&quot; with no closing brace, see:</span>
+                <span class="c1">//https://github.com/jrburke/requirejs/issues/273</span>
+                <span class="o">!</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">attachEvent</span><span class="p">.</span><span class="nx">toString</span> <span class="o">&amp;&amp;</span> <span class="nx">node</span><span class="p">.</span><span class="nx">attachEvent</span><span class="p">.</span><span class="nx">toString</span><span class="p">().</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;[native code&#39;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+                <span class="o">!</span><span class="nx">isOpera</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//Probably IE. IE (at least 6-8) do not fire</span>
+            <span class="c1">//script onload right after executing the script, so</span>
+            <span class="c1">//we cannot tie the anonymous define call to a name.</span>
+            <span class="c1">//However, IE reports the script as being in &#39;interactive&#39;</span>
+            <span class="c1">//readyState at the time of the define call.</span>
+            <span class="nx">useInteractive</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+
+            <span class="nx">node</span><span class="p">.</span><span class="nx">attachEvent</span><span class="p">(</span><span class="s1">&#39;onreadystatechange&#39;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">onScriptLoad</span><span class="p">);</span>
+            <span class="c1">//It would be great to add an error handler here to catch</span>
+            <span class="c1">//404s in IE9+. However, onreadystatechange will fire before</span>
+            <span class="c1">//the error handler, so that does not help. If addEvenListener</span>
+            <span class="c1">//is used, then IE will fire error before load, but we cannot</span>
+            <span class="c1">//use that pathway given the connect.microsoft.com issue</span>
+            <span class="c1">//mentioned above about not doing the &#39;script execute,</span>
+            <span class="c1">//then fire the script load event listener before execute</span>
+            <span class="c1">//next script&#39; that other browsers do.</span>
+            <span class="c1">//Best hope: IE10 fixes the issues,</span>
+            <span class="c1">//and then destroys all installs of IE 6-9.</span>
+            <span class="c1">//node.attachEvent(&#39;onerror&#39;, context.onScriptError);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;load&#39;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">onScriptLoad</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">onScriptError</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">url</span><span class="p">;</span>
+
+        <span class="c1">//For some cache cases in IE 6-8, the script executes before the end</span>
+        <span class="c1">//of the appendChild execution, so to tie an anonymous define</span>
+        <span class="c1">//call to the module name (which is stored on the node), hold on</span>
+        <span class="c1">//to a reference to this node, but clear after the DOM insertion.</span>
+        <span class="nx">currentlyAddingScript</span> <span class="o">=</span> <span class="nx">node</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">baseElement</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">head</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">baseElement</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">head</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">currentlyAddingScript</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+        <span class="k">return</span> <span class="nx">node</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">isWebWorker</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//In a web worker, use importScripts. This is not a very</span>
+        <span class="c1">//efficient use of importScripts, importScripts will block until</span>
+        <span class="c1">//its script is downloaded and evaluated. However, if web workers</span>
+        <span class="c1">//are in play, the expectation that a build has been done so that</span>
+        <span class="c1">//only one script needs to be loaded anyway. This may need to be</span>
+        <span class="c1">//reevaluated if other use cases become common.</span>
+        <span class="nx">importScripts</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
+
+        <span class="c1">//Account for anonymous modules</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nx">completeLoad</span><span class="p">(</span><span class="nx">moduleName</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>没错，它也是用了向html文档中插入script标签的方法，在该标签中加入了一个用于唯一标记模块的属性data-requiremodule，这样当js被加载运行后js中如果调用了define这个方法，那么这个方法就回去获取这个属性从而该模块就算是成功加载完毕了。</p>
+
+<p>不过我感觉在浏览器中总有这么一些方法让人觉得很奇怪，浏览器无法提供一些原始的api，但是为了达到某些目的，开发者们通过其他的方法是实现，但是这个方法的设计的初衷并不是用于该目的。就比如这个通过在文档中插入javascript标签，另外还有什么iframe实现跨域，插入表单实现post请求，还有其他很多这样的方法。嗯，这样好吗？</p>
+
+<h1></h1>
+
+<p>回过头来也补充下seajs的模块依赖分析与加载方式。</p>
+
+<p>在seajs中通过define，require方法传入一个方法，这个方法就是整个模块的内容，在js中我们可以获取的某一个方法的内容，比如说：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">var module = function(){alert(&#39;hello world!&#39;)};
+console.log(module);
+//function(){alert(&#39;hello world!&#39;)};
+</code></pre></div>
+<p>然后seajs会通过正则表达式分析模块中的依赖，这样就可以实现模块的同步require了，所以你的seajs模块中可以向下面这么写（seajs通常就是这样使用de的），却不会出现异步加载js的问题：</p>
+<div class="highlight"><pre><code class="javascript language-javascript" data-lang="javascript"><span class="nx">defint</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./t&#39;</span><span class="p">);</span>
+  <span class="nx">t</span><span class="p">.</span><span class="nx">test</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>seajs中用于分析模块依赖关系的正则表达式是：</p>
+<div class="highlight"><pre><code class="javascript language-javascript" data-lang="javascript">    <span class="kd">var</span> <span class="nx">REQUIRE_RE</span> <span class="o">=</span> <span class="sr">/&quot;(?:\\&quot;|[^&quot;])*&quot;|&#39;(?:\\&#39;|[^&#39;])*&#39;|\/\*[\S\s]*?\*\/|\/(?:\\\/|[^/\r\n])+\/(?=[^\/])|\/\/.*|\.\s*require|(?:^|[^$])\brequire\s*\(\s*([&quot;&#39;])(.+?)\1\s*\)/g</span>
+</code></pre></div>
+<p>不过这样的方法引来了很多争议，现在正在考虑是否只是在debug的模式下才使用这样的方式，然后通过spm打包后上线的代码不会进行这样的检测，如果需要按需异步加载的话使用这样的方式：</p>
+<div class="highlight"><pre><code class="javascript language-javascript" data-lang="javascript"><span class="nx">seajs</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;./t&#39;</span><span class="kd">function</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">t</span><span class="p">.</span><span class="nx">test</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre></div>
+  </div>
+  <div class="post-meta">
+    <span>Tags: </span>
+    
+      <span style="margin: 5px"><a href="/tags.html#js">js</a></span>
+    
+  </div>
+  <div class="section-nav">
+    <div class="left align-left">
+      
+      <a href="/2012/10/23/%E4%B8%96%E7%95%8C%E5%88%AB%E4%B8%BA%E6%88%91%E6%8B%85%E5%BF%83.html" class="prev-next">上一篇:<b> 世界别为我担心</b></a>
+      
+    </div>
+    <div class="right align-right">
+      
+      <a href="/2012/12/31/2012%E8%BF%87%E5%8E%BB%E4%BA%86%EF%BC%8C%E6%88%91%E6%B4%BB%E4%BA%86%E4%B8%8B%E4%BA%86.html" class="prev-next">下一篇:<b> 2012过去了，我活了下了</b></a>
+      
+    </div>
+  </div>
+</article>
+<div class="box">
+<!-- baidu shared -->
+<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdPic":"","bdStyle":"0","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+<!-- Comment BEGIN -->
+<!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"yutingzhao"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- Duoshuo Comment END -->
+<!-- Comment END -->
+</div>
+
+
+  </main>
+
+  <footer>
+    <a href='https://github.com/yutingzhao1991'>YuTingzhao</a> Copyright © 2014 i.yutingzhao.com
+  </footer>
+</body>
+</html>

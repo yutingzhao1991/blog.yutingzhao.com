@@ -1,0 +1,273 @@
+<!-- 没多少代码，博客所有的代码都在 github 上面，本身也是托管在gitpage上的 -->
+<!-- 欢迎交换友情链接，可以微博私信我！ -->
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+  <title>【翻译】JavaScript内存管理</title>
+  <meta name='viewport' content='width=device-width'>
+  <meta name='renderer' content='webkit'>
+  <link rel='stylesheet' href='/css/main.css' />
+</head>
+<body>
+  <header>
+    <h1><a href="http://yutingzhao.com">Love.Passion.Dream</a></h1>
+    <nav>
+      <ul>
+        
+          <li>
+            <a href='/'>主页</a>
+          </li>
+        
+          <li>
+            <a href='/tags.html'>标签</a>
+          </li>
+        
+          <li>
+            <a href='/about.html'>我</a>
+          </li>
+        
+          <li>
+            <a href='/links.html'>友链</a>
+          </li>
+        
+          <li>
+            <a href='/sites.html'>收藏</a>
+          </li>
+        
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <article class="box">
+  <h1>【翻译】JavaScript内存管理</h1>
+  
+  <span class="post-category">
+    <span class="label"></span>
+  </span>
+  <div class="post-meta">
+    <time class="post-date">2013-03-15 00:01</time>
+  </div>
+  <div class="post">
+  <p><span class="edui-filter-align-right">原文：</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Memory_Management" title="Memory Management">Memory Management</a>  </p>
+
+<p><strong>介绍：</strong></p>
+
+<p>低级语言，例如C。会提供类似malloc()和free()这样的内存管理原语操作。但是在javascript中则会在对象或者字符串等声明时自动分配内存，并且当他不在被使用的时候释放掉。这便是内存回收。这个“自动”便是使得很多高级语言的开发者产生疑惑的源头，他们认为这样则不必关心内存管理。这是一个误区！</p>
+
+<p><strong>内存的生命周期：</strong></p>
+
+<p>无论是任何语言，内存的生命周期基本都是下面几个部分</p>
+
+<p>1.分配你所需要的内存</p>
+
+<p>2.使用它</p>
+
+<p>3.当你不许要再用它的时候释放掉</p>
+
+<p>前面两部基本在所有的语言中都是很明确的，但是第三步就不相同了。在C语言这样的低级语言中是很明确的，不过在javascript这样的高级语言中就显得有些模糊了。</p>
+
+<p><strong>javascript的内存分配</strong></p>
+
+<p><strong>变量初始化</strong></p>
+
+<p>为了不让程序员因为内存分配而困扰，javascript的内存分配是在变量声明的时候进行的。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">var n = 123; // allocates memory for a number
+var s = &quot;azerty&quot;; // allocates memory for a string
+
+var o = {
+  a: 1,
+  b: null
+}; // allocates memory for an object and contained values
+
+var a = [1, null, &quot;abra&quot;]; // (like object) allocates memory for the array and contained values
+
+function f(a){
+  return a + 2;
+} // allocates a function (which is a callable object)
+
+// function expressions also allocate an object
+someElement.addEventListener(&#39;click&#39;, function(){
+  someElement.style.backgroundColor = &#39;blue&#39;;
+}, false);
+</code></pre></div>
+<p>通过方法调用分配</p>
+
+<p>通过方法构造新的对象</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">var d = new Date();
+var e = document.createElement(&#39;div&#39;); // allocates an DOM element
+</code></pre></div>
+<p>通过方法产生新的值</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">var s = &quot;azerty&quot;;
+var s2 = s.substr(0, 3); // s2 is a new string
+// Since strings are immutable value, JavaScript may decide to not allocate memory, but just store the [0, 3] range.
+
+var a = [&quot;ouais ouais&quot;, &quot;nan nan&quot;];
+var a2 = [&quot;generation&quot;, &quot;nan nan&quot;];
+var a3 = a.concat(a2); // new array with 4 elements being the concatenation of a and a2 elements
+</code></pre></div>
+<p><strong>变量的使用</strong></p>
+
+<p>变量的使用则意味着对内存的读写操作，通常是在读写对象的变量，或者传递参数时操作的。</p>
+
+<p><strong>当内存不再需要的时候释放掉</strong></p>
+
+<p>大部分的内存管理的问题都在这一部分产生。其中zui最困难的就是找出什么时候才是：“内存不再需要被使用”，这通常需要程序员来做出判断。</p>
+
+<p>高级语言则嵌入了一段程序叫做：“垃圾回收员”，它的工作就是跟踪内存的分配并且找出什么时候不再需要它的，然后将其释放掉。这个程序所遇到的普遍问题是很多内存的需要是逻辑上的，是不可通过算法判定的。</p>
+
+<p><strong>垃圾回收：</strong></p>
+
+<p>上面说了找到内存什么时候才是不再被使用是不可判定的，这使得垃圾回收这个问题构成了一定的局限性。这一部分将会解释一些关于垃圾回收的一些主要的概念帮助理解一些主要的垃圾回收算法以及它们的局限性。**<br>
+**</p>
+
+<p><span class="edui-filter-line-through">引言：</span></p>
+
+<p><span class="edui-filter-line-through">这些垃圾回收的主要概念基于参考文献中的一些概念。</span></p>
+
+<p><span class="edui-filter-line-through"></span></p>
+
+<h3>引用</h3>
+
+<p>垃圾回收中一个主要的概念是引用。在内存管理中，当一个对象无论是显式的还是隐式的使用了另外一个对象，我们就说他引用了另外一个对象。例如，javascript对象存在一个隐式的指向原型的引用，还有显式指向他的属性值的引用。</p>
+
+<p>在这里，对象的概念超出了javascript传统意义上对象的概念，他还包括函数作用域和全局作用域。</p>
+
+<p>（看了昨天的翻译，我自己都汗了，我说怎么看着这么别扭呢，其实别人已经有更好的翻译了，请移步<a href="http://www.cnblogs.com/softlover/archive/2012/12/14/2811718.html" title="这里">这里</a>）</p>
+
+<p>引用计数垃圾回收法</p>
+
+<p>这是最主要的一种垃圾回收算法，这个算法将“一个对象不再需要”降级为“一个对象不再存在引用”。当一个对象的引用数为0的时候它将会被回收。</p>
+
+<p>例子：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">var o = { 
+  a: {
+    b:2
+  }
+}; // 2 objects are created. One is referenced by the other as one of its property.
+// The other is referenced by virtue of being assigned to the &#39;o&#39; variable.
+// Obviously, none can be garbage-collected
+
+
+var o2 = o; // the &#39;o2&#39; variable is the second thing that has a reference to the object
+o = 1; // now, the object that was originally in &#39;o&#39; has a unique reference embodied by the &#39;o2&#39; variable
+
+var oa = o2.a; // reference to &#39;a&#39; property of the object.
+// This object has now 2 references: one as a property, the other as the &#39;oa&#39; variable
+
+o2 = &quot;yo&quot;; // The object that was originally in &#39;o&#39; has now zero references to it.
+// It can be garbage-collected.
+// However what was its &#39;a&#39; property is still referenced by the &#39;oa&#39; variable, so it cannot be free&#39;d
+
+oa = null; // what was the &#39;a&#39; property of the object originally in o has zero references to it.
+// it can be garbage collected.
+</code></pre></div>
+<p>局限性：循环</p>
+
+<p>这个很低级的算法带来的局限性就是当两个对象互相引用形成一个环的时候其实已经是“不在需要”，但是它并不会被回收。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">function f(){
+  var o = {};
+  var o2 = {};
+  o.a = o2; // o references o2
+  o2.a = o; // o2 references o
+
+  return &quot;azerty&quot;;
+}
+
+f();
+// Two objects are created and reference one another thus creating a cycle.
+// They will not get out of the function scope after the function call, so they
+// are effectively useless and could be free&#39;d.
+// However, the reference-counting algorithm considers that since each of both object is referenced
+// at least once, none can be garbage-collected
+</code></pre></div>
+<p>实例：</p>
+
+<p>IE6，7就是一个典型的通过引用计数法处理DOM对象的垃圾回收。所以一种普遍存在的会导致它们内存泄露的方法就是：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">var div = document.createElement(&quot;div&quot;);
+
+div.onclick = function(){
+
+  doSomething();
+
+}; // The div has a reference to the event handler via its &#39;onclick&#39; property
+
+// The handler also has a reference to the div since the &#39;div&#39; variable can be accessed within the function scope
+
+// This cycle will cause both objects not to be garbage-collected and thus a memory leak.
+</code></pre></div>
+<p>标记和清扫算法</p>
+
+<p>这个算法将“不再需要”降级为“无法访问”。这个算法假设有一个根集合，一开始垃圾回收程序会从这些节点开始遍历，查找所有能够通过这些节点引用的对象。能够到达的对象将其标记，最后就能找到所有的可以访问的对象并且回收掉那些不可访问的对象。</p>
+
+<p>这个算法比上面那个通过0引用来判断是否可回收的算法要更好一些，再也不会出现循环引用所产生的垃圾了。</p>
+
+<p>截至到2012年，所有的现代浏览器都实现了标记和清扫的垃圾回收算法，提升了javascript的垃圾回收能力。但是这几年来都是在提升这个算法本身的性能，并没有去超越这个算法实现更精确的找到“不再需要”。</p>
+
+<p>循环已经不再是问题</p>
+
+<p>在标记和清扫算法中，循环被很好的解决了，它不再成为垃圾回收中的问题。</p>
+
+<p>局限：对象需要被明确的定义无法访问</p>
+
+<p>虽然这被视为一个局限性，但是在实际中很少出现这样的情形，所以在垃圾回收机制中也没有大多对这个问题的关注。</p>
+
+<p>其他参考</p>
+
+<ul>
+<li><p><a href="http://www.ibm.com/developerworks/web/library/wa-memleak/">IBM article on &quot;Memory leak patterns in JavaScript&quot; (2007)</a></p></li>
+<li><p><a href="http://msdn.microsoft.com/en-us/magazine/ff728624.aspx">Kangax article on how to register event handler and avoid memory leaks (2010)</a></p></li>
+</ul>
+
+  </div>
+  <div class="post-meta">
+    <span>Tags: </span>
+    
+      <span style="margin: 5px"><a href="/tags.html#js">js</a></span>
+    
+  </div>
+  <div class="section-nav">
+    <div class="left align-left">
+      
+      <a href="/2013/03/13/%E9%82%A3%E4%BA%9B%E5%B9%B4%EF%BC%8C%E6%88%91%E4%BB%AC%E4%B8%80%E8%B5%B7%E7%88%B1%E8%BF%87%E7%9A%84%E7%AE%97%E6%B3%95.html" class="prev-next">上一篇:<b> 那些年，我们一起爱过的算法</b></a>
+      
+    </div>
+    <div class="right align-right">
+      
+      <a href="/2013/03/24/%E6%80%BB%E7%BB%93%E4%B8%8B%E6%B5%8F%E8%A7%88%E5%99%A8%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82%E7%9A%84%E5%90%84%E7%A7%8D%E6%96%B9%E5%BC%8F.html" class="prev-next">下一篇:<b> 总结下浏览器向服务端发送请求的各种方式</b></a>
+      
+    </div>
+  </div>
+</article>
+<div class="box">
+<!-- baidu shared -->
+<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdPic":"","bdStyle":"0","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+<!-- Comment BEGIN -->
+<!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"yutingzhao"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- Duoshuo Comment END -->
+<!-- Comment END -->
+</div>
+
+
+  </main>
+
+  <footer>
+    <a href='https://github.com/yutingzhao1991'>YuTingzhao</a> Copyright © 2014 i.yutingzhao.com
+  </footer>
+</body>
+</html>
