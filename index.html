@@ -2,6 +2,8 @@
 layout: default
 title: Love.Passion.Dream
 ---
+
+<link rel="stylesheet" href="http://zenorocha.github.io/jquery-github/js/assets/base.css">
 <article>
 
 <div class="home box">
@@ -15,4 +17,16 @@ title: Love.Passion.Dream
   </ul>
 </div>
 
+<div class="box">
+  <div data-repo="yutingzhao1991/blog.yutingzhao.com" id="repo"></div>
+</div>  
+
 </article>
+
+<script src="http://cdn.staticfile.org/jquery/2.1.1-rc2/jquery.min.js"></script>
+<script src="http://zenorocha.github.io/jquery-github/js/jquery.github.min.js"></script>
+<script>
+$(function() {
+    $('#repo').github()
+})
+</script>
