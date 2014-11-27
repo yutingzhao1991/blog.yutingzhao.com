@@ -11,6 +11,12 @@
   - name: beego
     url: http://beego.me/
     notes: 基于 Go 语言的web框架，国人开发
+  - name: backbone
+    url: http://backbonejs.org/
+    notes: 前端轻量级MVC框架
+  - name: emberjs
+    url: http://emberjs.com/
+    notes: 前端开发框架
 
 - name: jslib
   notes: JS库
@@ -34,6 +40,9 @@
   - name: docker
     url: https://www.docker.com/
     notes: docker是由go语言编写的，一个快速部署的轻量级虚拟技术项目，他允许开发人员将自己的程序和运行环境一起打包，制作成一个docker的image（镜像），这样部署到服务器上，也只需要下载这个image就可以将程序跑起来，免去每次都安装各种依赖和环境的麻烦，还能够做到应用程序之间的隔离.
+  - name: FIS
+    url: http://fis.baidu.com/
+    notes: 百度开发的FIS是专为解决前端开发中自动化工具、性能优化、模块化框架、开发规范、代码部署、开发流程等问题的工具框架。
 
 - name: graph
   notes: 前端图表库
@@ -80,6 +89,12 @@
   - name: ikons
     url: http://ikons.piotrkwiatkowski.co.uk/
     notes: 矢量图标
+  - name: less
+    url: http://www.lesscss.net/
+    notes: CSS 方言
+  - name: sass
+    url: http://sass-lang.com/
+    notes: CSS 方言
 
 - name: blogs
   notes: 技术博客
@@ -94,3 +109,16 @@
   - name: flume
     url: http://flume.apache.org/
     notes: apache 的一个分布式流式数据处理框架，用于把分散的大数据聚集进行处理
+  - name: storm
+    url: https://storm.apache.org/
+    notes: apache 分布式实时处理框架
+  - name: kafka
+    url: http://kafka.apache.org/
+    notes: apache 分布式消息系统
+
+- name: web server
+  notes: web 服务器技术
+  links:
+  - name: nginx
+    url: http://nginx.org/
+    notes: 高性能的 HTTP 和 反向代理 服务器
