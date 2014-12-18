@@ -1,6 +1,6 @@
 ---
 title: 任务管理框架 JobManager
-date: 16:17 2012/06/13
+date: 16:17 2014/12/14
 layout: post
 tags:
 - nodejs
