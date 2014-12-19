@@ -95,6 +95,9 @@
   - name: sass
     url: http://sass-lang.com/
     notes: CSS 方言
+  - name: dribbble
+    url: https://dribbble.com/
+    notes: 国外的设计师社区
 
 - name: blogs
   notes: 技术博客
